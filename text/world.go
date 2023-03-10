@@ -2,7 +2,8 @@ package text
 
 import (
 	"errors"
-	"github.com/sapphire-ai-dev/sapphire-core/world"
+
+	world "github.com/sapphire-ai-dev/sapphire-world"
 )
 
 type textWorld struct {

@@ -1,7 +1,7 @@
 package text
 
 import (
-	"github.com/sapphire-ai-dev/sapphire-core/world"
+	world "github.com/sapphire-ai-dev/sapphire-world"
 )
 
 const (
@@ -205,8 +205,11 @@ func (f *file) newLine() *line {
 		characters: []*character{},
 	}
 
-	f.lines = append(f.lines, result)
 	return result
+}
+
+func (f *file) appendLine(line *line) {
+	f.lines = append(f.lines, line)
 }
 
 type character struct {

@@ -24,12 +24,12 @@ World
 	    # Cmd: used to enable implementation-specific commands per world
 */
 type World interface {
-    Name() string
-    Reset()
-    Tick()
-    NewActor(args ...any) (int, []*ActionInterface)
-    Register(actorId int, cycle func())
-    Look(actorId int) []*Image
-    Feel(actorId int) []*Touch
-    Cmd(args ...any)
+	Name() string
+	Reset()
+	Tick()
+	NewActor(args ...any) (int, []*ActionInterface)
+	Register(actorId int, cycle func())
+	Look(actorId int) []*Image
+	Feel(actorId int) []*Touch
+	Cmd(args ...any)
 }

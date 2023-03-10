@@ -3,8 +3,9 @@ package adaptor
 import (
 	"errors"
 	"fmt"
-	"github.com/sapphire-ai-dev/sapphire-core/world"
 	"strings"
+
+	world "github.com/sapphire-ai-dev/sapphire-world"
 )
 
 // if the agent ever needs to connect to multiple worlds simultaneously, it can connect to this adaptor

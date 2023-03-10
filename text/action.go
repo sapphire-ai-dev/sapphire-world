@@ -1,7 +1,7 @@
 package text
 
 import (
-	"github.com/sapphire-ai-dev/sapphire-core/world"
+	world "github.com/sapphire-ai-dev/sapphire-world"
 )
 
 func (w *textWorld) validCursorItem(currDir *directory, pos *actorPos, cmd int) bool {
@@ -182,6 +182,92 @@ func (w *textWorld) pressKeyWrap(actorId, cmd int) *world.ActionInterface {
 	}
 }
 
+func (w *textWorld) validCursor(actorId int, cmd int) bool {
+	currFile, pos := w.identifyFile(actorId)
+	if currFile == nil {
+		return false
+	}
+
+	if pos.cursorChar == 0 && (cmd == pressKeyCmdLeft || cmd == pressKeyCmdBackspace) {
+		return false
+	}
+
+	if pos.cursorLine == 0 && cmd == pressKeyCmdUp {
+		return false
+	}
+
+	currLine := currFile.lines[pos.cursorLine]
+	if pos.cursorLine == len(currFile.lines)-1 && cmd == pressKeyCmdDown {
+		return false
+	}
+
+	if pos.cursorChar == len(currLine.characters) && cmd == pressKeyCmdRight {
+		return false
+	}
+
+	return true
+}
+
+func (w *textWorld) specialKeyReady(actorId int, cmd int) bool {
+	return w.validCursor(actorId, cmd)
+}
+
+func (w *textWorld) specialKeyStep(actorId int, cmd int) {
+	currFile, pos := w.identifyFile(actorId)
+	if currFile == nil {
+		return
+	}
+
+	if !w.validCursor(actorId, cmd) {
+		return
+	}
+
+	currLine := currFile.lines[pos.cursorLine]
+
+	switch cmd {
+	case pressKeyCmdBackspace:
+		w.actors[actorId].cursorChar--
+
+		left, right := currLine.characters[:pos.cursorChar-1], currLine.characters[pos.cursorChar:]
+		currLine.characters = append(left, right...)
+	case pressKeyCmdEnter:
+		currLine.characters = currLine.characters[:pos.cursorChar]
+		newLine := currFile.newLine()
+		newLine.characters = currLine.characters[pos.cursorChar:]
+
+		up, down := currFile.lines[:pos.cursorLine], currFile.lines[pos.cursorLine+1:]
+		up = append(up, currLine)
+		currFile.lines = append(append(up, newLine), down...)
+		w.actors[actorId].cursorLine++
+		w.actors[actorId].cursorChar = 0
+	case pressKeyCmdUp:
+		w.actors[actorId].cursorLine--
+	case pressKeyCmdDown:
+		w.actors[actorId].cursorLine++
+	case pressKeyCmdLeft:
+		w.actors[actorId].cursorChar--
+	default:
+		// pressKeyCmdRight
+		w.actors[actorId].cursorChar++
+	}
+}
+
+func (w *textWorld) specialKeyWrap(actorId, cmd int) *world.ActionInterface {
+	if specialKeyCmds[cmd] != true {
+		return nil
+	}
+
+	return &world.ActionInterface{
+		Name: "key" + pressKeyCmds[cmd],
+		Ready: func() bool {
+			return w.specialKeyReady(actorId, cmd)
+		},
+		Step: func() {
+			w.specialKeyStep(actorId, cmd)
+		},
+	}
+}
+
 func (w *textWorld) newActionInterfaces(actorId int) []*world.ActionInterface {
 	var result []*world.ActionInterface
 	for cmd := range changeItemCmds {
@@ -190,6 +276,10 @@ func (w *textWorld) newActionInterfaces(actorId int) []*world.ActionInterface {
 
 	for cmd := range pressKeyCmds {
 		result = append(result, w.pressKeyWrap(actorId, cmd))
+	}
+
+	for cmd := range specialKeyCmds {
+		result = append(result, w.specialKeyWrap(actorId, cmd))
 	}
 
 	return result

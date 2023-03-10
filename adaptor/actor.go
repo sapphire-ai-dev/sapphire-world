@@ -1,6 +1,6 @@
 package adaptor
 
-import "github.com/sapphire-ai-dev/sapphire-core/world"
+import "github.com/sapphire-ai-dev/sapphire-world"
 
 type actor struct {
 	w     *adaptorWorld
