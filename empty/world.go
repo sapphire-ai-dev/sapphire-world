@@ -1,6 +1,6 @@
 package empty
 
-import "github.com/sapphire-ai-dev/sapphire-core/world"
+import world "github.com/sapphire-ai-dev/sapphire-world"
 
 /*
 emptyWorld

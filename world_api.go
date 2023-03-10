@@ -37,5 +37,5 @@ func Feel(id int) []*Touch {
 }
 
 func Cmd(args ...any) {
-	currentWorld.Cmd(args...)
+    currentWorld.Cmd(args...)
 }

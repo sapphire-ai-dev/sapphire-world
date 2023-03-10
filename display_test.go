@@ -12,5 +12,5 @@ func TestNewDisplayClient(t *testing.T) {
 	for i := 0; i < 30; i++ {
 		time.Sleep(time.Second)
 		dc.Send([]byte(strconv.Itoa(i)))
-	}
+    }
 }

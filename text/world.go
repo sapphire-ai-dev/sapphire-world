@@ -2,7 +2,8 @@ package text
 
 import (
 	"errors"
-	"github.com/sapphire-ai-dev/sapphire-core/world"
+
+	world "github.com/sapphire-ai-dev/sapphire-world"
 )
 
 type textWorld struct {
@@ -89,12 +90,12 @@ func (w *textWorld) Feel(_ int) []*world.Touch {
 func (w *textWorld) Cmd(_ ...any) {}
 
 func newTextWorld() *textWorld {
-	result := &textWorld{}
-	result.Reset()
-	return result
+    result := &textWorld{}
+    result.Reset()
+    return result
 }
 
 func Init() {
-	w := newTextWorld()
-	world.SetWorld(w)
+    w := newTextWorld()
+    world.SetWorld(w)
 }

@@ -1,9 +1,10 @@
 package text
 
 import (
-	"github.com/sapphire-ai-dev/sapphire-core/world"
-	"github.com/stretchr/testify/assert"
 	"testing"
+
+	world "github.com/sapphire-ai-dev/sapphire-world"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestTextWorldInit(t *testing.T) {
@@ -60,8 +61,8 @@ func TestTextWorldLook(t *testing.T) {
 	assert.Empty(t, w.Look(0))
 
 	actorId, _ := w.NewActor()
-	assert.Empty(t, w.Look(actorId))
+    assert.Empty(t, w.Look(actorId))
 
-	w.actors[actorId].currItemId++
-	assert.Empty(t, w.Look(actorId))
+    w.actors[actorId].currItemId++
+    assert.Empty(t, w.Look(actorId))
 }

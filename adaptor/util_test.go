@@ -1,10 +1,11 @@
 package adaptor
 
 import (
-	"github.com/sapphire-ai-dev/sapphire-core/world"
-	"github.com/stretchr/testify/assert"
 	"math/rand"
 	"testing"
+
+	world "github.com/sapphire-ai-dev/sapphire-world"
+	"github.com/stretchr/testify/assert"
 )
 
 func assertEmptyNotNil(t *testing.T, a any) {

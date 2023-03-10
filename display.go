@@ -2,8 +2,9 @@ package world
 
 import (
 	"fmt"
-	"github.com/gorilla/websocket"
 	"net/url"
+
+	"github.com/gorilla/websocket"
 )
 
 type DisplayClient struct {

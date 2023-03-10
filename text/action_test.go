@@ -1,9 +1,10 @@
 package text
 
 import (
-	"github.com/sapphire-ai-dev/sapphire-core/world"
-	"github.com/stretchr/testify/assert"
 	"testing"
+
+	world "github.com/sapphire-ai-dev/sapphire-world"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestChangeItemErrorHandling(t *testing.T) {
@@ -204,4 +205,64 @@ func TestPressKey(t *testing.T) {
 	assert.Equal(t, len(f.lines), 1)
 	assert.Equal(t, len(f.lines[0].characters), 1)
 	assert.Equal(t, f.lines[0].characters[0].shape, pressKeyCmds[pressKeyCmd0])
+}
+
+func TestSpecialKey(t *testing.T) {
+	w := newTextWorld()
+	actorId, _ := w.NewActor()
+
+	root := w.rootDirectory
+	f := root.newFile("fName")
+
+	cErr := w.specialKeyWrap(actorId, pressKeyCmdLeft)
+	w.actors[actorId].currItemId = -1
+	assert.False(t, cErr.Ready())
+	cErr.Step()
+
+	w.actors[actorId].currItemId = f.id()
+
+	assert.Nil(t, w.specialKeyWrap(actorId, pressKeyCmd0))
+	ciL := w.specialKeyWrap(actorId, pressKeyCmdLeft)
+	ciR := w.specialKeyWrap(actorId, pressKeyCmdRight)
+	ciB := w.specialKeyWrap(actorId, pressKeyCmdBackspace)
+	ciE := w.specialKeyWrap(actorId, pressKeyCmdEnter)
+	ciU := w.specialKeyWrap(actorId, pressKeyCmdUp)
+	ciD := w.specialKeyWrap(actorId, pressKeyCmdDown)
+
+	assert.False(t, ciB.Ready())
+	assert.False(t, ciL.Ready())
+	assert.False(t, ciU.Ready())
+
+	// create three chars in file
+	c0 := w.pressKeyWrap(actorId, pressKeyCmd0)
+	c1 := w.pressKeyWrap(actorId, pressKeyCmd1)
+	c2 := w.pressKeyWrap(actorId, pressKeyCmd2)
+    c0.Step()
+    c1.Step()
+    c2.Step()
+
+    assert.Equal(t, w.actors[actorId].cursorChar, 3)
+    assert.False(t, ciR.Ready())
+
+    ciL.Step()
+    assert.Equal(t, w.actors[actorId].cursorChar, 2)
+    ciR.Step()
+    assert.Equal(t, w.actors[actorId].cursorChar, 3)
+
+    ciB.Step()
+    assert.Equal(t, w.actors[actorId].cursorChar, 2)
+    assert.Equal(t, len(f.lines[0].characters), 2)
+
+    ciL.Step()
+    ciE.Step()
+    assert.Equal(t, w.actors[actorId].cursorChar, 0)
+    assert.Equal(t, w.actors[actorId].cursorLine, 1)
+
+    ciU.Step()
+    assert.Equal(t, w.actors[actorId].cursorLine, 0)
+
+    ciD.Step()
+    assert.Equal(t, w.actors[actorId].cursorLine, 1)
+    assert.False(t, ciD.Ready())
+    ciD.Step()
 }
