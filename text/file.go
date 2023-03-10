@@ -221,35 +221,35 @@ type character struct {
 func (c *character) img(cursorCharDelta int) *world.Image {
 	cursorDir := world.TernaryZro
 	if cursorCharDelta > 0 {
-		cursorDir = world.TernaryPos
-	} else if cursorCharDelta < 0 {
-		cursorDir = world.TernaryNeg
-	}
+        cursorDir = world.TernaryPos
+    } else if cursorCharDelta < 0 {
+        cursorDir = world.TernaryNeg
+    }
 
-	return &world.Image{
-		Id:   c.id,
-		Name: "",
-		Permanent: []*world.Info{
-			{
-				Labels: []string{world.InfoLabelObservable, contentTypeRoot, c.shape},
-				Value:  nil,
-			},
-		},
-		Transient: []*world.Info{
-			{
-				Labels: []string{world.InfoLabelObservable, charDirection, cursorDir},
-				Value:  cursorCharDelta,
-			},
-		},
-	}
+    return &world.Image{
+        Id:   c.id,
+        Name: "",
+        Permanent: []*world.Info{
+            {
+                Labels: []string{world.InfoLabelObservable, contentTypeRoot, c.shape},
+                Value:  nil,
+            },
+        },
+        Transient: []*world.Info{
+            {
+                Labels: []string{world.InfoLabelObservable, charDirection, cursorDir},
+                Value:  cursorCharDelta,
+            },
+        },
+    }
 }
 
 func (l *line) newCharacter(shape string) *character {
-	result := &character{
-		id:     world.NewUnitId(),
-		parent: l,
-		shape:  shape,
-	}
+    result := &character{
+        id:     world.NewUnitId(),
+        parent: l,
+        shape:  shape,
+    }
 
-	return result
+    return result
 }

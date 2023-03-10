@@ -1,9 +1,10 @@
 package adaptor
 
 import (
-	"github.com/sapphire-ai-dev/sapphire-world"
-	"github.com/stretchr/testify/assert"
 	"testing"
+
+	world "github.com/sapphire-ai-dev/sapphire-world"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestAdaptorWorldConstructor(t *testing.T) {

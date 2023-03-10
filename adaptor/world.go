@@ -149,22 +149,22 @@ func newAdaptorWorld() *adaptorWorld {
 var tempSingleton *adaptorWorld
 
 func InitStart() {
-	tempSingleton = newAdaptorWorld()
+    tempSingleton = newAdaptorWorld()
 }
 
 // Proxy the currently registered world and return the newly created child world id
 func Proxy() int {
-	if tempSingleton == nil {
-		panic(errWorldNotFound)
-	}
+    if tempSingleton == nil {
+        panic(errWorldNotFound)
+    }
 
-	return tempSingleton.registerChild()
+    return tempSingleton.registerChild()
 }
 
 func InitComplete() {
-	if tempSingleton == nil {
-		panic(errWorldNotFound)
-	}
+    if tempSingleton == nil {
+        panic(errWorldNotFound)
+    }
 
-	world.SetWorld(tempSingleton)
+    world.SetWorld(tempSingleton)
 }
